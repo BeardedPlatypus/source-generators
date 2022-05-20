@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeardedPlatypus.SourceGenerators", "BeardedPlatypus.SourceGenerators\BeardedPlatypus.SourceGenerators.csproj", "{0F173994-F54A-4D6D-9CF5-65FB4ADBA514}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeardedPlatypus.SourceGenerators.Tests", "BeardedPlatypus.SourceGenerators.Tests\BeardedPlatypus.SourceGenerators.Tests.csproj", "{53E7FB17-2605-4C51-9170-4C20BE0F2C9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F173994-F54A-4D6D-9CF5-65FB4ADBA514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F173994-F54A-4D6D-9CF5-65FB4ADBA514}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F173994-F54A-4D6D-9CF5-65FB4ADBA514}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F173994-F54A-4D6D-9CF5-65FB4ADBA514}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53E7FB17-2605-4C51-9170-4C20BE0F2C9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53E7FB17-2605-4C51-9170-4C20BE0F2C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53E7FB17-2605-4C51-9170-4C20BE0F2C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53E7FB17-2605-4C51-9170-4C20BE0F2C9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05F65400-B09A-44E7-A6D4-C1399741C7FC}
+	EndGlobalSection
+EndGlobal
