@@ -1,7 +1,7 @@
-﻿using BeardedPlatypus.SourceGenerators.Visitor;
+﻿using BeardedPlatypus.SourceGenerators.Annotations.Visitor;
 using NUnit.Framework;
 
-namespace BeardedPlatypus.SourceGenerators.Tests.Visitor;
+namespace BeardedPlatypus.SourceGenerators.Annotations.Tests.Visitor;
 
 [TestFixture]
 public class VisitableAttributeTest

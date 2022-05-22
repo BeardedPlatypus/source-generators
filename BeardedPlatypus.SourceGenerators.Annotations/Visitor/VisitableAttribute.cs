@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BeardedPlatypus.SourceGenerators.Visitor
+namespace BeardedPlatypus.SourceGenerators.Annotations.Visitor
 {
     /// <summary>
     /// <see cref="VisitableAttribute"/> defines the attribute with which interfaces
