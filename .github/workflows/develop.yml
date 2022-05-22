@@ -56,9 +56,39 @@ jobs:
       - name: Build BeardedPlatypus.SourceGenerators
         run: dotnet build --no-restore
         
-      - name: Run Tests
-        run: dotnet test --no-build --verbosity normal
+      - name: BeardedPlatypus.SourceGenerators.Tests
+        uses: zyborg/dotnet-tests-report@v1
+        with:
+          project_path: BeardedPlatypus.SourceGenerators.Tests
+          report_name: BeardedPlatypus.SourceGenerators
+          report_title: BeardedPlatypus.SourceGenerators
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gist_name: BeardedPlatypus.SourceGenerators.md
+          gist_badge_label: 'BeardedPlatypus.SourceGenerators: %Counters_passed%/%Counters_total%'
+          gist_token: ${{ secrets.GIST_TOKEN }}
+      
+      - name: BeardedPlatypus.SourceGenerators.Annotations.Tests
+        uses: zyborg/dotnet-tests-report@v1
+        with:
+          project_path: BeardedPlatypus.SourceGenerators.Annotations.Tests
+          report_name: BeardedPlatypus.SourceGenerators.Annotations
+          report_title: BeardedPlatypus.SourceGenerators.Annotations
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gist_name: BeardedPlatypus.SourceGenerators.Annotations.md
+          gist_badge_label: 'BeardedPlatypus.SourceGenerators.Annotations: %Counters_passed%/%Counters_total%'
+          gist_token: ${{ secrets.GIST_TOKEN }}
         
+      - name: Test BeardedPlatypus.SourceGenerators.Tests
+        uses: zyborg/dotnet-tests-report@v1
+        with:
+          project_path: BeardedPlatypus.SourceGenerators.Samples
+          report_name: BeardedPlatypus.SourceGenerators.Samples
+          report_title: BeardedPlatypus.SourceGenerators.Samples
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gist_name: BeardedPlatypus.SourceGenerators.Samples.md
+          gist_badge_label: 'BeardedPlatypus.SourceGenerators.Samples: %Counters_passed%/%Counters_total%'
+          gist_token: ${{ secrets.GIST_TOKEN }}          
+          
   sonar:
     name: 'SonarCloud'
     runs-on: windows-latest
