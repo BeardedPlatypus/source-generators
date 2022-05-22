@@ -17,17 +17,18 @@ public class TemplateTest
             "IElementVisitor");
 
         const string expectedResult = 
-            "namespace BeardedPlatypus.SourceGenerators.Tests.Visitor"                                                                                  + "\n" +
-            "{"                                                                                                   + "\n" +
-            "    public partial interface IElement"                                                               + "\n" +
-            "    {"                                                                                               + "\n" +
-            "        /// <summary>"                                                                               + "\n" +
-            "        /// Accept the specified <paramref name=\"visitor\"/>."                                      + "\n" +
-            "        /// </summary>"                                                                              + "\n" +
-            "        /// <param name=\"visitor\">The visitor which visits this <see cref=\"IElement\"/>.</param>" + "\n" +
-            "        void Accept(IElementVisitor visitor);"                                                       + "\n" +
-            "    }"                                                                                               + "\n" +
-            "}";
+            @"// Auto-generated code
+namespace BeardedPlatypus.SourceGenerators.Tests.Visitor
+{
+    public partial interface IElement
+    {
+        /// <summary>
+        /// Accept the specified <paramref name=""visitor"" />.
+        /// </summary>
+        /// <param name=""visitor"">The visitor which visits this <see cref=""IElement""/>.</param>
+        void Accept(IElementVisitor visitor);
+    }
+}";
 
         Assert.That(result, Is.EqualTo(expectedResult));
     }
@@ -53,33 +54,38 @@ public class TemplateTest
         string? result = Template.VisitorInterface(
             "internal",
             "IElementVisitor",
+            "IElement",
             "BeardedPlatypus.SourceGenerators.Tests.Visitor",
             classes);
 
-        const string expectedResult = 
-            "namespace BeardedPlatypus.SourceGenerators.Tests.Visitor"                                                                                  + "\n" +
-            "{"                                                                    + "\n" +
-            "    internal interface IElementVisitor"                               + "\n" +
-            "    {"                                                                + "\n" + 
-            "        /// <summary>"                                                + "\n" +
-            "        /// Receive the specified <paramref name=\"element\"."        + "\n" +
-            "        /// </summary>"                                               + "\n" +
-            "        /// <param name=\"element\">The element to act upon.</param>" + "\n" +
-            "        void Receive(ElementA element);"                              + "\n" +
-            "\n" +
-            "        /// <summary>"                                                + "\n" +
-            "        /// Receive the specified <paramref name=\"element\"."        + "\n" +
-            "        /// </summary>"                                               + "\n" +
-            "        /// <param name=\"element\">The element to act upon.</param>" + "\n" +
-            "        void Receive(ElementB element);"                              + "\n" +
-            "\n" +
-            "        /// <summary>"                                                + "\n" +
-            "        /// Receive the specified <paramref name=\"element\"."        + "\n" +
-            "        /// </summary>"                                               + "\n" +
-            "        /// <param name=\"element\">The element to act upon.</param>" + "\n" +
-            "        void Receive(ElementC element);"                              + "\n" +
-            "    }"                                                                + "\n" +
-            "}";
+        const string expectedResult = @"// Auto-generated code
+namespace BeardedPlatypus.SourceGenerators.Tests.Visitor
+{
+    /// <summary>
+    /// <see cref=""IElementVisitor""/> defines the visitor interface to visit the 
+    /// implementations of the <see cref=""IElement""/>.
+    /// </summary>
+    internal interface IElementVisitor
+    {
+        /// <summary>
+        /// Receive the specified <paramref name=""element"" />.
+        /// </summary>
+        /// <param name=""element"">The element to act upon.</param>
+        void Receive(ElementA element);
+
+        /// <summary>
+        /// Receive the specified <paramref name=""element"" />.
+        /// </summary>
+        /// <param name=""element"">The element to act upon.</param>
+        void Receive(ElementB element);
+
+        /// <summary>
+        /// Receive the specified <paramref name=""element"" />.
+        /// </summary>
+        /// <param name=""element"">The element to act upon.</param>
+        void Receive(ElementC element);
+    }
+}";
 
         Assert.That(result, Is.EqualTo(expectedResult));
     }
@@ -108,20 +114,18 @@ public class TemplateTest
             "BeardedPlatypus.SourceGenerators.Tests.Visitor",
             visitors);
 
-        const string expectedResult =
-            "namespace BeardedPlatypus.SourceGenerators.Tests.Visitor"       + "\n" +
-            "{"                                                              + "\n" +
-            "    public partial class Element"                               + "\n" +
-            "    {"                                                          + "\n" +
-            "        public void Accept(IElementVisitorA visitor) =>"        + "\n" +
-            "            visitor.Receive(this);"                             + "\n" +
-            "\n" +
-            "        public abstract void Accept(IElementVisitorB visitor);" + "\n" +
-            "\n" +
-            "        internal void Accept(IElementVisitorC visitor) =>"      + "\n" +
-            "            visitor.Receive(this);"                             + "\n" +
-            "    }"                                                          + "\n" +
-            "}";
+        const string expectedResult = @"// Auto-generated code
+namespace BeardedPlatypus.SourceGenerators.Tests.Visitor
+{
+    public partial class Element
+    {
+        public void Accept(IElementVisitorA visitor) => visitor.Receive(this);
+
+        public abstract void Accept(IElementVisitorB visitor);
+
+        internal void Accept(IElementVisitorC visitor) => visitor.Receive(this);
+    }
+}";
 
         Assert.That(result, Is.EqualTo(expectedResult));
     }

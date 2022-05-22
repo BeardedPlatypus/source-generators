@@ -36,17 +36,18 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
                                                            string interfaceName,
                                                            string namespaceName,
                                                            string visitorName) =>
-        $"namespace {namespaceName}"                                                                                  + "\n" +
-         "{"                                                                                                          + "\n" +
-        $"    {accessModifier} partial interface {interfaceName}"                                                     + "\n" +
-         "    {"                                                                                                      + "\n" +
-         "        /// <summary>"                                                                                      + "\n" +
-         "        /// Accept the specified <paramref name=\"visitor\"/>."                                         + "\n" +
-         "        /// </summary>"                                                                                     + "\n" +
-        $"        /// <param name=\"visitor\">The visitor which visits this <see cref=\"{interfaceName}\"/>.</param>" + "\n" +
-        $"        void Accept({visitorName} visitor);"                                                                + "\n" +
-         "    }"                                                                                                      + "\n" +
-         "}";
+        $@"// Auto-generated code
+namespace {namespaceName}
+{{
+    {accessModifier} partial interface {interfaceName}
+    {{
+        /// <summary>
+        /// Accept the specified <paramref name=""visitor"" />.
+        /// </summary>
+        /// <param name=""visitor"">The visitor which visits this <see cref=""{interfaceName}""/>.</param>
+        void Accept({visitorName} visitor);
+    }}
+}}";
 
         /// <summary>
         /// Generate the name of the extension file.
@@ -70,6 +71,9 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
         /// <param name="visitorName">
         /// The name of the visitor interface.
         /// </param>
+        /// <param name="interfaceName">
+        /// The name of the interface for which this visitor is defined.
+        /// </param>
         /// <param name="namespaceName">
         /// The name of the namespace of which the interface is part.
         /// </param>
@@ -81,25 +85,31 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
         /// </returns>
         internal static string VisitorInterface(string accessModifier,
                                                 string visitorName,
+                                                string interfaceName,
                                                 string namespaceName,
                                                 IEnumerable<string> classes)
         {
             string ToClassString(string className) =>
-                 "        /// <summary>"                                               + "\n" +
-                 "        /// Receive the specified <paramref name=\"element\"."       + "\n" +
-                 "        /// </summary>"                                              + "\n" +
-                 "        /// <param name=\"element\">The element to act upon.</param>" + "\n" +
-                $"        void Receive({className} element);" + "\n"; 
+                $@"
+        /// <summary>
+        /// Receive the specified <paramref name=""element"" />.
+        /// </summary>
+        /// <param name=""element"">The element to act upon.</param>
+        void Receive({className} element);";
 
 
 
-            return $"namespace {namespaceName}"                      + "\n" +
-                    "{"                                              + "\n" +
-                   $"    {accessModifier} interface {visitorName}"   + "\n" +
-                    "    {"                                          + "\n" +
-                    string.Join("\n", classes.Select(ToClassString)) +
-                    "    }"                                          + "\n" +
-                    "}";
+            return $@"// Auto-generated code
+namespace {namespaceName}
+{{
+    /// <summary>
+    /// <see cref=""{visitorName}""/> defines the visitor interface to visit the 
+    /// implementations of the <see cref=""{interfaceName}""/>.
+    /// </summary>
+    {accessModifier} interface {visitorName}
+    {{{string.Join("\r\n", classes.Select(ToClassString))}
+    }}
+}}";
         }
 
         /// <summary>
@@ -141,17 +151,17 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
         {
             string ToAcceptMethod(Tuple<string, string, bool> visitor) =>
                 visitor.Item3 
-                    ? $"        {visitor.Item1} abstract void Accept({visitor.Item2} visitor);" + "\n"
-                    : $"        {visitor.Item1} void Accept({visitor.Item2} visitor) =>" + "\n" +
-                       "            visitor.Receive(this);"                              + "\n";
+                    ? $"        {visitor.Item1} abstract void Accept({visitor.Item2} visitor);"
+                    : $"        {visitor.Item1} void Accept({visitor.Item2} visitor) => visitor.Receive(this);";
 
-            return $"namespace {namespaceName}"                                             + "\n" +
-                    "{"                                                                     + "\n" +
-                   $"    {accessModifierClass} partial class {className}"                   + "\n" +
-                    "    {"                                                                 + "\n" +
-                    string.Join("\n", visitors.Select(ToAcceptMethod)) +
-                    "    }"                                                                 + "\n" +
-                    "}";
+            return $@"// Auto-generated code
+namespace {namespaceName}
+{{
+    {accessModifierClass} partial class {className}
+    {{
+{string.Join("\r\n\r\n", visitors.Select(ToAcceptMethod))}
+    }}
+}}";
         }
     }
 }
