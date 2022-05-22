@@ -71,19 +71,19 @@ namespace BeardedPlatypus.SourceGenerators.Tests.Visitor
         /// Receive the specified <paramref name=""element"" />.
         /// </summary>
         /// <param name=""element"">The element to act upon.</param>
-        void Receive(ElementA element);
+        void Visit(ElementA element);
 
         /// <summary>
         /// Receive the specified <paramref name=""element"" />.
         /// </summary>
         /// <param name=""element"">The element to act upon.</param>
-        void Receive(ElementB element);
+        void Visit(ElementB element);
 
         /// <summary>
         /// Receive the specified <paramref name=""element"" />.
         /// </summary>
         /// <param name=""element"">The element to act upon.</param>
-        void Receive(ElementC element);
+        void Visit(ElementC element);
     }
 }";
 
@@ -119,11 +119,11 @@ namespace BeardedPlatypus.SourceGenerators.Tests.Visitor
 {
     public partial class Element
     {
-        public void Accept(IElementVisitorA visitor) => visitor.Receive(this);
+        public void Accept(IElementVisitorA visitor) => visitor.Visit(this);
 
         public abstract void Accept(IElementVisitorB visitor);
 
-        internal void Accept(IElementVisitorC visitor) => visitor.Receive(this);
+        internal void Accept(IElementVisitorC visitor) => visitor.Visit(this);
     }
 }";
 

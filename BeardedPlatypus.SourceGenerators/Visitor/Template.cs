@@ -95,7 +95,7 @@ namespace {namespaceName}
         /// Receive the specified <paramref name=""element"" />.
         /// </summary>
         /// <param name=""element"">The element to act upon.</param>
-        void Receive({className} element);";
+        void Visit({className} element);";
 
 
 
@@ -152,7 +152,7 @@ namespace {namespaceName}
             string ToAcceptMethod(Tuple<string, string, bool> visitor) =>
                 visitor.Item3 
                     ? $"        {visitor.Item1} abstract void Accept({visitor.Item2} visitor);"
-                    : $"        {visitor.Item1} void Accept({visitor.Item2} visitor) => visitor.Receive(this);";
+                    : $"        {visitor.Item1} void Accept({visitor.Item2} visitor) => visitor.Visit(this);";
 
             return $@"// Auto-generated code
 namespace {namespaceName}
