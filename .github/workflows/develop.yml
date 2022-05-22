@@ -10,6 +10,16 @@ on:
     branches: 
       - main
       - develop
+      - 'feat/**'
+      - 'fix/**'
+      - 'docs/**'
+      - 'style/**'
+      - 'test/**'
+      - 'build/**'
+      - 'ci/**'
+      - 'chore/**'
+      - 'revert/**'
+      
   # Triggers the workflow on pull requests to any of the conventional
   # commit message branches.
   pull_request:
