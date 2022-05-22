@@ -1,0 +1,49 @@
+# 'Develop' defines the workflow to build the source-generators project, run the 
+# tests, and analyze the code.
+
+name: Develop
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push to either the main or develop branch
+  push:
+    branches: 
+      - main
+      - develop
+  # Triggers the workflow on pull requests to any of the conventional
+  # commit message branches.
+  pull_request:
+    branches:
+      - 'feat/**'
+      - 'fix/**'
+      - 'docs/**'
+      - 'style/**'
+      - 'test/**'
+      - 'build/**'
+      - 'ci/**'
+      - 'chore/**'
+      - 'revert/**'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set-up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+          
+      - name: Restore dependencies
+        run: dotnet restore
+        
+      - name: Build BeardedPlatypus.SourceGenerators
+        run: dotnet build --no-restore
+        
+      - name: Run Tests
+        run: dotnet test --no-build --verbosity normal
