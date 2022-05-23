@@ -7,11 +7,11 @@ automatically extend your source code with useful software patterns.
 
 Currently, the following patterns are implemented:
 
-* [Visitor Pattern](BeardedPlatypus.SourceGenerators/Visitor/README.md)
+* [Visitor Pattern](BeardedPlatypus.SourceGenerators.Annotations/Visitor/README.md)
 
 ## Motivation - A small collection of C\# Source Generators to reduce boilerplate
 
-Software Architecting patterns define a proven approach to solve common problems in
+Software patterns define proven approaches to solve common problems in
 software programs. Implementing such patterns however, often requires writing some
 boilerplate, which can be cumbersome or error-prone. With a bit of meta-programming
 it is possible to automate the implementation of such patterns, thus reducing the 
@@ -36,7 +36,13 @@ The `BeardedPlatypus.SourceGenerators` repository consists of two NuGet packages
 Both of these should be added through the NuGet manager to the project which should make use
 of the source generators.
 
-## Development - Clone this repository
+For additional information on how to add these packages to your project, please look at
+[github's documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-nuget-registry).
+
+## Usage - Add attributes to generate source code
+
+The different source generators can be controlled by adding the appropriate attributes to the
+project. Sample usage can be found in the `BeardedPlatypus.SourceGenerators.Samples` project.
 
 ## License - MIT
 
