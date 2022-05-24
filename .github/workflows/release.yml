@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     name: 'Pack NuGet packages'
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -27,10 +27,10 @@ jobs:
           dotnet-version: 6.0.x
           
       - name: Pack BeardedPlatypus.SourceGenerators.Annotations
-        run:  dotnet pack .\BeardedPlatypus.SourceGenerators.Annotations\BeardedPlatypus.SourceGenerators.Annotations.csproj -c Release --include-source --nologo
+        run:  dotnet pack ./BeardedPlatypus.SourceGenerators.Annotations/BeardedPlatypus.SourceGenerators.Annotations.csproj -c Release --include-source --nologo
           
       - name: Pack BeardedPlatypus.SourceGenerators
-        run:  dotnet pack .\BeardedPlatypus.SourceGenerators\BeardedPlatypus.SourceGenerators.csproj -c Release --include-source --nologo
+        run:  dotnet pack ./BeardedPlatypus.SourceGenerators/BeardedPlatypus.SourceGenerators.csproj -c Release --include-source --nologo
         
       - uses: actions/upload-artifact@v3
         with:
