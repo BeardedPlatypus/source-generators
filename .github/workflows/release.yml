@@ -1,0 +1,38 @@
+# 'Release' defines the workflow to build the source-generators project, and publish
+# the corresponding NuGet packages.
+
+name: Release
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push to either the main or develop branch
+  push:
+    branches: 
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: 'Build and Test'
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set-up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+          
+      - name: Pack BeardedPlatypus.SourceGenerators.Annotations
+        run:  dotnet pack .\BeardedPlatypus.SourceGenerators.Annotations\BeardedPlatypus.SourceGenerators.Annotations.csproj -c Release --include-source --nologo
+          
+      - name: Pack BeardedPlatypus.SourceGenerators
+        run:  dotnet pack .\BeardedPlatypus.SourceGenerators\BeardedPlatypus.SourceGenerators.csproj -c Release --include-source --nologo
+        
+      - uses: actions/upload-artifact@v3
+        with:
+          name: nuget-packages
+          path: BeardedPlatypus.SourceGenerators*/Release/*.nupkg
