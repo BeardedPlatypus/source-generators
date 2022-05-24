@@ -2,6 +2,31 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+
+    <PackageId>BeardedPlatypus.SourceGenerators.Annotations</PackageId>
+    <version>0.1.0</version>
+    <Authors>Maarten Tegelaers</Authors>
+    <Description>
+      BeardedPlatypus.SourceGenerators.Annotations provides the custom Attributes to use in
+      conjunction with the BeardedPlatypus.SourceGenerators package to automatically generate 
+      additional source code in your project.
+    </Description>
+    <Copyright>Copyright (c) Maarten Tegelaers</Copyright>
+    <PackageProjectUrl>https://github.com/BeardedPlatypus/source-generators</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/BeardedPlatypus/source-generators</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Tags>source-generator visitor</Tags>
+    <PackageReleaseNotes>CHANGELOG.md</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\.docs\icon.png" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="..\CHANGELOG.md" Pack="true" PackagePath="" />
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="" />
+  </ItemGroup>
 
 </Project>
