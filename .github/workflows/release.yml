@@ -16,7 +16,7 @@ on:
 
 jobs:
   build:
-    name: 'Build and Test'
+    name: 'Pack NuGet packages'
     runs-on: windows-latest
 
     steps:
@@ -36,4 +36,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: nuget-packages
-          path: BeardedPlatypus.SourceGenerators*/Release/*.nupkg
+          path: BeardedPlatypus.SourceGenerators*/**/*.nupkg
