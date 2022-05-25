@@ -1,0 +1,62 @@
+{
+    "branches": [
+        "main"
+    ],
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": "CHANGELOG.md"
+            }
+        ],
+        [
+            "@google/semantic-release-replace-plugin",
+            {
+                "replacements": [
+                    {
+                        "files": [
+                            "BeardedPlatypus.SourceGenerator/BeardedPlatypus.SourceGenerator.csproj",
+                            "BeardedPlatypus.SourceGenerator.Annotations/BeardedPlatypus.SourceGenerator.Annotations.csproj"
+                        ],
+                        "from": "<version>.*</version>",
+                        "to": "<version>${nextRelease.version}</version>",
+                        "results": [
+                            {
+                                "file": "BeardedPlatypus.SourceGenerator/BeardedPlatypus.SourceGenerator.csproj",
+                                "hasChanged": true,
+                                "numMatches": 1,
+                                "numReplacements": 1
+                            },
+                            {
+                                "file": "BeardedPlatypus.SourceGenerator.Annotations/BeardedPlatypus.SourceGenerator.Annotations.csproj",
+                                "hasChanged": true,
+                                "numMatches": 1,
+                                "numReplacements": 1
+                            }
+                        ],
+                        "countMatches": true
+                    }
+                ]
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "CHANGELOG.md",
+                    "BeardedPlatypus.SourceGenerator/BeardedPlatypus.SourceGenerator.csproj",
+                    "BeardedPlatypus.SourceGenerator.Annotations/BeardedPlatypus.SourceGenerator.Annotations.csproj"
+                ]
+            }
+        ],
+        "@semantic-release/github",
+        [
+            "@semantic-release/exec",
+            {
+                "publishCmd": "./.build/publish.sh ${nextRelease.version}"
+            }
+        ]
+    ]
+}

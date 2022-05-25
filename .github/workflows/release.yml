@@ -15,8 +15,8 @@ on:
 
 jobs:
   build:
-    name: 'Pack NuGet packages'
-    runs-on: windows-latest
+    name: 'Release BeardedPlatypus.SourceGenerators'
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -25,14 +25,20 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.x
-          
-      - name: Pack BeardedPlatypus.SourceGenerators.Annotations
-        run:  dotnet pack .\BeardedPlatypus.SourceGenerators.Annotations\BeardedPlatypus.SourceGenerators.Annotations.csproj -c Release --include-source --nologo
-          
-      - name: Pack BeardedPlatypus.SourceGenerators
-        run:  dotnet pack .\BeardedPlatypus.SourceGenerators\BeardedPlatypus.SourceGenerators.csproj -c Release --include-source --nologo
-        
-      - uses: actions/upload-artifact@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          name: nuget-packages
-          path: BeardedPlatypus.SourceGenerators*/**/*.nupkg
+          node-version: 'lts/*'
+          
+      - name: Install Semantic-Release dependencies
+        run: |
+          npm install @semantic-release/git -D
+          npm install @semantic-release/changelog -D
+          npm install @google/semantic-release-replace-plugin -D
+          npm install @semantic-release/exec -D
+          
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
