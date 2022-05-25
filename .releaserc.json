@@ -17,20 +17,20 @@
                 "replacements": [
                     {
                         "files": [
-                            "BeardedPlatypus.SourceGenerator/BeardedPlatypus.SourceGenerator.csproj",
-                            "BeardedPlatypus.SourceGenerator.Annotations/BeardedPlatypus.SourceGenerator.Annotations.csproj"
+                            "BeardedPlatypus.SourceGenerators/BeardedPlatypus.SourceGenerators.csproj",
+                            "BeardedPlatypus.SourceGenerators.Annotations/BeardedPlatypus.SourceGenerators.Annotations.csproj"
                         ],
                         "from": "<version>.*</version>",
                         "to": "<version>${nextRelease.version}</version>",
                         "results": [
                             {
-                                "file": "BeardedPlatypus.SourceGenerator/BeardedPlatypus.SourceGenerator.csproj",
+                                "file": "BeardedPlatypus.SourceGenerators/BeardedPlatypus.SourceGenerators.csproj",
                                 "hasChanged": true,
                                 "numMatches": 1,
                                 "numReplacements": 1
                             },
                             {
-                                "file": "BeardedPlatypus.SourceGenerator.Annotations/BeardedPlatypus.SourceGenerator.Annotations.csproj",
+                                "file": "BeardedPlatypus.SourceGenerators.Annotations/BeardedPlatypus.SourceGenerators.Annotations.csproj",
                                 "hasChanged": true,
                                 "numMatches": 1,
                                 "numReplacements": 1
@@ -46,8 +46,8 @@
             {
                 "assets": [
                     "CHANGELOG.md",
-                    "BeardedPlatypus.SourceGenerator/BeardedPlatypus.SourceGenerator.csproj",
-                    "BeardedPlatypus.SourceGenerator.Annotations/BeardedPlatypus.SourceGenerator.Annotations.csproj"
+                    "BeardedPlatypus.SourceGenerators/BeardedPlatypus.SourceGenerators.csproj",
+                    "BeardedPlatypus.SourceGenerators.Annotations/BeardedPlatypus.SourceGenerators.Annotations.csproj"
                 ]
             }
         ],
