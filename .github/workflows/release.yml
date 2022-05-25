@@ -26,6 +26,9 @@ jobs:
         with:
           dotnet-version: 6.0.x
       
+      - name: Register github NuGet source
+        run: dotnet nuget add source --username BeardedPlatypus --password ${{ secrets.GITHUB_TOKEN }} --name github
+      
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
