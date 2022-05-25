@@ -53,7 +53,6 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
             }
         }
 
-        // TODO: Extend for other declarations, or just give an error?
         private static string GetAccessibilityString(INamedTypeSymbol symbol) =>
             symbol.DeclaredAccessibility == Accessibility.Public
                 ? "public"
