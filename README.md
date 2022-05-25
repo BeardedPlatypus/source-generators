@@ -1,4 +1,4 @@
-<p align='center'><img align='center' src='https://raw.githubusercontent.com/BeardedPlatypus/source-generators/docs/setup-initial-docs/.docs/icon.svg' width='25%'></p>
+<p align='center'><img align='center' src='https://raw.githubusercontent.com/BeardedPlatypus/source-generators/docs/main/.docs/icon.svg' width='25%'></p>
 
 # BeardedPlatypus.SourceGenerators
 
