@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/BeardedPlatypus/source-generators/compare/v1.0.0...v1.0.1) (2022-05-25)
+
+
+### Bug Fixes
+
+* **visitor:** remove verification todo ([8513877](https://github.com/BeardedPlatypus/source-generators/commit/85138779d430521b2bd32e27241a20b1e6a99925))
+
 # 1.0.0 (2022-05-25)
 
 

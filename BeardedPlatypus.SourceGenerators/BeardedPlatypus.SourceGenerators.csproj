@@ -6,7 +6,7 @@
     <IncludeBuildOutput>false</IncludeBuildOutput> 
     
     <PackageId>BeardedPlatypus.SourceGenerators</PackageId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <Authors>Maarten Tegelaers</Authors>
     <Description>
       BeardedPlatypus.SourceGenerators provides the source generators to use in conjunction 
