@@ -34,7 +34,7 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
             GenerateClassExtensions(context, syntaxReceiver);
         }
 
-        private static void GenerateVisitorInterfaces(GeneratorExecutionContext context, 
+        private static void GenerateVisitorInterfaces(GeneratorExecutionContext context,
                                                       SyntaxReceiver syntaxReceiver)
         {
             foreach ((INamedTypeSymbol interfaceSymbol, IEnumerable<INamedTypeSymbol> classSymbols) in syntaxReceiver.InterfacesToExtend)
@@ -43,13 +43,12 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
                 string visitorName = GetVisitorName(interfaceSymbol);
                 SourceText sourceText = SourceText.From(
                     Template.VisitorInterface(
-                        GetAccessibilityString(interfaceSymbol), 
-                        visitorName, 
+                        GetAccessibilityString(interfaceSymbol),
+                        visitorName,
                         interfaceSymbol.ToDisplayString(),
-                        interfaceSymbol.ContainingNamespace.ToDisplayString(), 
+                        interfaceSymbol.ContainingNamespace.ToDisplayString(),
                         classSymbols.Select(cs => cs.ToDisplayString())),
                     Encoding.UTF8);
-                // TODO: verify if this is correct.
                 context.AddSource(Template.VisitorInterfaceFileName(visitorName), sourceText);
             }
         }
@@ -57,7 +56,7 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
         // TODO: Extend for other declarations, or just give an error?
         private static string GetAccessibilityString(INamedTypeSymbol symbol) =>
             symbol.DeclaredAccessibility == Accessibility.Public
-                ? "public" 
+                ? "public"
                 : "internal";
 
         // TODO: Extend this with attribute retrieval to allow for customization of the visitor name.
@@ -67,17 +66,17 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
             return $"{name}Visitor";
         }
 
-        private void GenerateInterfaceExtensions(GeneratorExecutionContext context, 
+        private void GenerateInterfaceExtensions(GeneratorExecutionContext context,
                                                  SyntaxReceiver syntaxReceiver)
         {
             foreach ((INamedTypeSymbol interfaceSymbol, IEnumerable<INamedTypeSymbol> _) in syntaxReceiver.InterfacesToExtend)
             {
                 SourceText sourceText = SourceText.From(
                     Template.VisitableInterfaceExtension(
-                        GetAccessibilityString(interfaceSymbol), 
-                        interfaceSymbol.Name, 
-                        interfaceSymbol.ContainingNamespace.ToDisplayString(), 
-                        GetVisitorName(interfaceSymbol, fullyQualified:true)), 
+                        GetAccessibilityString(interfaceSymbol),
+                        interfaceSymbol.Name,
+                        interfaceSymbol.ContainingNamespace.ToDisplayString(),
+                        GetVisitorName(interfaceSymbol, fullyQualified: true)),
                     Encoding.UTF8);
                 context.AddSource(Template.VisitableExtensionFileName(interfaceSymbol.Name), sourceText);
             }
@@ -90,11 +89,11 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
                 // TODO: Extend this to incorporate the correct abstract behaviour
                 SourceText sourceText = SourceText.From(
                     Template.VisitableClassExtension(
-                        GetAccessibilityString(classSymbol), 
-                        classSymbol.Name, 
-                        classSymbol.ContainingNamespace.ToDisplayString(), 
+                        GetAccessibilityString(classSymbol),
+                        classSymbol.Name,
+                        classSymbol.ContainingNamespace.ToDisplayString(),
                         interfaceSymbols.Select(s => new Tuple<string, string, bool>(GetAccessibilityString(s), GetVisitorName(s, true), false))),
-                    Encoding.UTF8); 
+                    Encoding.UTF8);
                 context.AddSource(Template.VisitableExtensionFileName(classSymbol.Name), sourceText);
             }
         }
@@ -150,7 +149,7 @@ namespace BeardedPlatypus.SourceGenerators.Visitor
                         classes = new List<INamedTypeSymbol>();
                         _interfacesToExtend[interfaceSymbol] = classes;
                     }
-                    
+
                     classes.Add(visitableClass.Item1);
                 }
             }
