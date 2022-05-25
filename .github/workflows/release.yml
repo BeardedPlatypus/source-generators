@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-    name: 'Pack NuGet packages'
+    name: 'Release BeardedPlatypus.SourceGenerators'
     runs-on: ubuntu-latest
 
     steps:
