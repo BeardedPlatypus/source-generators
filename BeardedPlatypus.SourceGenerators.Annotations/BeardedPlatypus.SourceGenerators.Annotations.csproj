@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
 
     <PackageId>BeardedPlatypus.SourceGenerators.Annotations</PackageId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <Authors>Maarten Tegelaers</Authors>
     <Description>
       BeardedPlatypus.SourceGenerators.Annotations provides the custom Attributes to use in

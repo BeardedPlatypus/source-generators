@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/BeardedPlatypus/source-generators/compare/v1.0.3...v1.0.4) (2022-05-26)
+
+
+### Bug Fixes
+
+* nuget packages pushed twice ([599f314](https://github.com/BeardedPlatypus/source-generators/commit/599f3141a08ac35b2efb1a097359d345539d51f4))
+
 ## [1.0.3](https://github.com/BeardedPlatypus/source-generators/compare/v1.0.2...v1.0.3) (2022-05-26)
 
 
