@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/BeardedPlatypus/source-generators/compare/v1.0.2...v1.0.3) (2022-05-26)
+
+
+### Bug Fixes
+
+* adjust .releaserc.json publish cmd ([2596ed8](https://github.com/BeardedPlatypus/source-generators/commit/2596ed8b1e4552dbb884f5d4643f0e25bda8df0d))
+
 ## [1.0.2](https://github.com/BeardedPlatypus/source-generators/compare/v1.0.1...v1.0.2) (2022-05-26)
 
 
