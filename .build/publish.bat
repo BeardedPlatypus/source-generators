@@ -22,16 +22,6 @@ dotnet ^
     --source "github"
 
 dotnet ^
-    nuget push ./BeardedPlatypus.SourceGenerators.Annotations/bin/Release/BeardedPlatypus.SourceGenerators.Annotations.%version%.symbols.nupkg ^
-    --api-key %GITHUB_TOKEN% ^
-    --source "github"
-
-dotnet ^
     nuget push ./BeardedPlatypus.SourceGenerators/bin/Release/BeardedPlatypus.SourceGenerators.%version%.nupkg ^
-    --api-key %GITHUB_TOKEN% ^
-    --source "github"
-
-dotnet ^
-    nuget push ./BeardedPlatypus.SourceGenerators/bin/Release/BeardedPlatypus.SourceGenerators.%version%.symbols.nupkg ^
     --api-key %GITHUB_TOKEN% ^
     --source "github"
