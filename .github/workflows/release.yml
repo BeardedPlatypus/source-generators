@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     name: 'Release BeardedPlatypus.SourceGenerators'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -27,10 +27,10 @@ jobs:
           dotnet-version: 6.0.x
       
       - name: Register github NuGet source
-        shell: bash
+        shell: cmd
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: dotnet nuget add source --username BeardedPlatypus --password "$GITHUB_TOKEN" --name github https://nuget.pkg.github.com/BeardedPlatypus/index.json
+        run: dotnet nuget add source --username BeardedPlatypus --password %GITHUB_TOKEN% --name github https://nuget.pkg.github.com/BeardedPlatypus/index.json
       
       - name: Setup Node.js
         uses: actions/setup-node@v2
