@@ -22,8 +22,11 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         /// </exception>
         public Param(string name, string typeName, string doc = null)
         {
-            Name = name.EnsureNotNull(nameof(name));
-            TypeName = typeName.EnsureNotNull(nameof(typeName));
+            Ensure.NotNull(name, nameof(name));
+            Ensure.NotNull(typeName, nameof(typeName));
+
+            Name = name;
+            TypeName = typeName;
             Doc = ExtractDocString(doc);
         }
 
@@ -37,7 +40,7 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="name"/> or <paramref name="typeSymbol"/> are <c>null</c>.
         /// </exception>
-        public Param(string name, INamedTypeSymbol typeSymbol, bool isFullyQualified, string doc) :
+        public Param(string name, INamedTypeSymbol typeSymbol, bool isFullyQualified, string doc = null) :
             this(name, ToTypeName(typeSymbol, isFullyQualified), doc) { }
 
         /// <summary>
