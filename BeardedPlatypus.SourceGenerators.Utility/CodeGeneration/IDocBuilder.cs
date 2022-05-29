@@ -9,20 +9,11 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
     public interface IDocBuilder
     {
         /// <summary>
-        /// Add the summary doc-string.
-        /// </summary>
-        /// <param name="summary">The summary doc-string.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="summary"/> is <c>null</c>.
-        /// </exception>
-        void AddSummary(string summary);
-
-        /// <summary>
-        /// Add the summary doc-string and return this builder.
+        /// Add the summary doc-string and return the new builder state.
         /// </summary>
         /// <param name="summary">The summary doc-string.</param>
         /// <returns>
-        /// This <see cref="IDocBuilder"/>
+        /// The new <see cref="IDocBuilder"/> state.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when <paramref name="summary"/> is <c>null</c>.
@@ -30,23 +21,11 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         IDocBuilder WithSummary(string summary);
 
         /// <summary>
-        /// Add the summary doc-string per line.
-        /// </summary>
-        /// <param name="summary">The lines of the doc-string</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when any value in <paramref name="summary"/> is <c>null</c>.
-        /// </exception>
-        /// <remarks>
-        /// Each value in summary corresponds with a single line in the summary.
-        /// </remarks>
-        void AddSummary(params string[] summary);
-
-        /// <summary>
-        /// Add the summary doc-string per line and return this builder.
+        /// Add the summary doc-string per line and return the new builder state.
         /// </summary>
         /// <param name="summary">The lines of the doc-string</param>
         /// <returns>
-        /// This <see cref="IDocBuilder"/>
+        /// The new <see cref="IDocBuilder"/> state.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when any value in <paramref name="summary"/> is <c>null</c>.
@@ -57,22 +36,12 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         IDocBuilder WithSummary(params string[] summary);
 
         /// <summary>
-        /// Add a new type-parameter doc-string.
-        /// </summary>
-        /// <param name="name">The name of the type-parameter</param>
-        /// <param name="docStr">The doc-string of the type-parameter.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="name"/> or <paramref name="docStr"/> is <c>null</c>.
-        /// </exception>
-        void AddTypeParam(string name, string docStr);
-
-        /// <summary>
-        /// Add a new type-parameter doc-string and return this builder.
+        /// Add a new type-parameter doc-string and return the new builder state.
         /// </summary>
         /// <param name="name">The name of the type-parameter</param>
         /// <param name="docStr">The doc-string of the type-parameter.</param>
         /// <returns>
-        /// This <see cref="IDocBuilder"/>
+        /// The new <see cref="IDocBuilder"/> state.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when <paramref name="name"/> or <paramref name="docStr"/> is <c>null</c>.
@@ -80,21 +49,11 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         IDocBuilder WithTypeParam(string name, string docStr);
 
         /// <summary>
-        /// Add the specified type-parameter doc-strings.
-        /// </summary>
-        /// <param name="parameters">The doc-strings of the type-parameters.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="parameters"/> is <c>null</c>
-        /// or any value contained in <paramref name="parameters"/> is <c>null</c>.
-        /// </exception>
-        void AddTypeParams(params (string Name, string DocStr)[] parameters);
-
-        /// <summary>
-        /// Add the specified type-parameter doc-strings and return this builder.
+        /// Add the specified type-parameter doc-strings and return the new builder state.
         /// </summary>
         /// <param name="parameters">The doc-strings of the type-parameters.</param>
         /// <returns>
-        /// This <see cref="IDocBuilder"/>
+        /// The new <see cref="IDocBuilder"/> state.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when <paramref name="parameters"/> is <c>null</c>
@@ -103,37 +62,17 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         IDocBuilder WithTypeParams(params (string Name, string DocStr)[] parameters);
 
         /// <summary>
-        /// Add a new parameter doc-string.
-        /// </summary>
-        /// <param name="name">The name of the parameter</param>
-        /// <param name="docStr">The doc-string of the parameter.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="name"/> or <paramref name="docStr"/> is <c>null</c>.
-        /// </exception>
-        void AddParam(string name, string docStr);
-
-        /// <summary>
         /// Add a new parameter doc-string and returns this builder.
         /// </summary>
         /// <param name="name">The name of the parameter</param>
         /// <param name="docStr">The doc-string of the parameter.</param>
         /// <returns>
-        /// This <see cref="IDocBuilder"/>
+        /// The new <see cref="IDocBuilder"/> state.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when <paramref name="name"/> or <paramref name="docStr"/> is <c>null</c>.
         /// </exception>
         IDocBuilder WithParam(string name, string docStr);
-
-        /// <summary>
-        /// Add the specified parameter doc-strings.
-        /// </summary>
-        /// <param name="parameters">The doc-strings of the parameters.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="parameters"/> is <c>null</c>
-        /// or any value contained in <paramref name="parameters"/> is <c>null</c>.
-        /// </exception>
-        void AddParams(params (string Name, string DocStr)[] parameters);
 
         /// <summary>
         /// Add the specified parameter doc-strings and returns this builder.
@@ -149,15 +88,6 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         IDocBuilder WithParams(params (string Name, string DocStr)[] parameters);
 
         /// <summary>
-        /// Add the returns doc-string.
-        /// </summary>
-        /// <param name="returns">The returns doc-string.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="returns"/> is <c>null</c>.
-        /// </exception>
-        void AddReturns(string returns);
-
-        /// <summary>
         /// Add the returns doc-string and return this builder.
         /// </summary>
         /// <param name="returns">The returns doc-string.</param>
@@ -168,18 +98,6 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         /// Thrown when <paramref name="returns"/> is <c>null</c>.
         /// </exception>
         IDocBuilder WithReturns(string returns);
-
-        /// <summary>
-        /// Add the returns doc-string per line.
-        /// </summary>
-        /// <param name="returns">The lines of the doc-string</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when any value in <paramref name="returns"/> is <c>null</c>.
-        /// </exception>
-        /// <remarks>
-        /// Each value in returns corresponds with a single line in the returns doc-str.
-        /// </remarks>
-        void AddReturns(params string[] returns);
 
         /// <summary>
         /// Add the returns doc-string per line and return this builder.
@@ -197,16 +115,6 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         IDocBuilder WithReturns(params string[] returns);
 
         /// <summary>
-        /// Add a new exception doc-string.
-        /// </summary>
-        /// <param name="name">The name of the exception</param>
-        /// <param name="docStr">The doc-string of the exception.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="name"/> or <paramref name="docStr"/> is <c>null</c>.
-        /// </exception>
-        void AddException(string name, string docStr);
-
-        /// <summary>
         /// Add a new exception doc-string and return this builder.
         /// </summary>
         /// <param name="name">The name of the exception</param>
@@ -218,17 +126,6 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         /// Thrown when <paramref name="name"/> or <paramref name="docStr"/> is <c>null</c>.
         /// </exception>
         IDocBuilder WithException(string name, string docStr);
-
-
-        /// <summary>
-        /// Add the specified exception doc-strings.
-        /// </summary>
-        /// <param name="exceptions">The doc-strings of the exceptions.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="exceptions"/> is <c>null</c>
-        /// or any value contained in <paramref name="exceptions"/> is <c>null</c>.
-        /// </exception>
-        void AddExceptions(params (string Name, string DocStr)[] exceptions);
 
         /// <summary>
         /// Add the specified exception doc-strings and return this builder.
@@ -244,15 +141,6 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         IDocBuilder WithExceptions(params (string Name, string DocStr)[] exceptions);
 
         /// <summary>
-        /// Add the remarks doc-string.
-        /// </summary>
-        /// <param name="remarks">The remarks doc-string.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when <paramref name="remarks"/> is <c>null</c>.
-        /// </exception>
-        void AddRemarks(string remarks);
-
-        /// <summary>
         /// Add the remarks doc-string and return this builder.
         /// </summary>
         /// <param name="remarks">The remarks doc-string.</param>
@@ -263,18 +151,6 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         /// Thrown when <paramref name="remarks"/> is <c>null</c>.
         /// </exception>
         IDocBuilder WithRemarks(string remarks);
-
-        /// <summary>
-        /// Add the remarks doc-string per line.
-        /// </summary>
-        /// <param name="remarks">The lines of the doc-string</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when any value in <paramref name="remarks"/> is <c>null</c>.
-        /// </exception>
-        /// <remarks>
-        /// Each value in remarks corresponds with a single line in the remarks doc-str.
-        /// </remarks>
-        void AddRemarks(params string[] remarks);
 
         /// <summary>
         /// Add the remarks doc-string per line and return this builder.

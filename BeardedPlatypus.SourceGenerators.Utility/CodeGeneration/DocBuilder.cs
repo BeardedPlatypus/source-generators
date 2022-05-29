@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using BeardedPlatypus.SourceGenerators.Utility.Internal;
 
@@ -9,158 +10,107 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
     /// </summary>
     public sealed class DocBuilder : IDocBuilder
     {
-        private IList<string> SummaryLines { get; set; } = new List<string>();
-        private IList<string> ReturnsLines { get; set; } = null;
-        private IList<string> RemarksLines { get; set; } = null;
+        private readonly IImmutableList<string> _summaryLines;
+        private readonly IImmutableList<string> _returnsLines;
+        private readonly IImmutableList<string> _remarksLines;
 
-        private IList<(string Name, string DocStr)> Params { get; } = 
-            new List<(string Name, string DocStr)>();
+        private readonly IImmutableList<(string Name, string DocStr)> _params;
+        private readonly IImmutableList<(string Name, string DocStr)> _typeParams;
+        private readonly IImmutableList<(string Name, IImmutableList<string> DocStr)> _exceptions;
 
-        private IList<(string Name, string DocStr)> TypeParams { get; } = 
-            new List<(string Name, string DocStr)>();
+        public DocBuilder() : this(ImmutableList.Create<string>(), 
+                                   null, 
+                                   null, 
+                                   ImmutableList.Create<(string Name, string DocStr)>(),
+                                   ImmutableList.Create<(string Name, string DocStr)>(),
+                                   ImmutableList.Create<(string Name, IImmutableList<string> DocStr)>())
+        { }
 
-        private IList<(string Name, IEnumerable<string> DocStr)> Exceptions { get; } = 
-            new List<(string Name, IEnumerable<string> DocStr)>();
+        private DocBuilder(DocBuilder srcBuilder,
+                           IImmutableList<string> updatedSummaryLines = null,
+                           IImmutableList<string> updatedReturnsLines = null,
+                           IImmutableList<string> updatedRemarksLines = null,
+                           IImmutableList<(string Name, string DocStr)> updatedParams = null,
+                           IImmutableList<(string Name, string DocStr)> updatedTypeParams = null,
+                           IImmutableList<(string Name, IImmutableList<string> DocStr)> updatedExceptions = null) :
+            this(updatedSummaryLines ?? srcBuilder._summaryLines,
+                 updatedReturnsLines ?? srcBuilder._returnsLines,
+                 updatedRemarksLines ?? srcBuilder._remarksLines,
+                 updatedParams ?? srcBuilder._params,
+                 updatedTypeParams ?? srcBuilder._typeParams,
+                 updatedExceptions ?? srcBuilder._exceptions)
+        {  }
 
-        public void AddSummary(string summary) =>
-            AddSummary(SplitDocString(summary)?.ToArray());
-
-        public IDocBuilder WithSummary(string summary)
+        private DocBuilder(IImmutableList<string> summaryLines,
+                           IImmutableList<string> returnsLines,
+                           IImmutableList<string> remarksLines,
+                           IImmutableList<(string Name, string DocStr)> @params,
+                           IImmutableList<(string Name, string DocStr)> typeParams,
+                           IImmutableList<(string Name, IImmutableList<string> DocStr)> exceptions)
         {
-            AddSummary(summary);
-            return this;
+            _summaryLines = summaryLines;
+            _returnsLines = returnsLines;
+            _remarksLines = remarksLines;
+            _params = @params;
+            _typeParams = typeParams;
+            _exceptions = exceptions;
         }
 
-        public void AddSummary(params string[] summary)
-        {
-            Ensure.ContainsNoNull(summary, nameof(summary));
-            SummaryLines = summary;
-        }
+        public IDocBuilder WithSummary(string summary) =>
+            WithSummary(SplitDocString(summary)?.ToArray());
 
         public IDocBuilder WithSummary(params string[] summary)
         {
-            AddSummary(summary);
-            return this;
+            Ensure.ContainsNoNull(summary, nameof(summary));
+            return new DocBuilder(this, updatedSummaryLines: summary.ToImmutableArray());
         }
 
-        public void AddTypeParam(string name, string docStr)
-        {
-            Ensure.NotNull(name, nameof(name));
-            Ensure.NotNull(docStr, nameof(docStr));
-
-            TypeParams.Add((name, docStr));
-        }
-
-        public IDocBuilder WithTypeParam(string name, string docStr)
-        {
-            AddTypeParam(name, docStr);
-            return this;
-        }
-
-        public void AddTypeParams(params (string Name, string DocStr)[] parameters)
-        {
-            Ensure.NotNull(parameters, nameof(parameters));
-            foreach (var (name, doc) in parameters) AddTypeParam(name, doc);
-        }
+        public IDocBuilder WithTypeParam(string name, string docStr) => 
+            WithTypeParams((name, docStr));
 
         public IDocBuilder WithTypeParams(params (string Name, string DocStr)[] parameters)
         {
-            AddTypeParams(parameters);
-            return this;
+            ValidateStringTupleArray(parameters, nameof(parameters));
+            return new DocBuilder(this, updatedTypeParams: _typeParams.AddRange(parameters));
         }
 
-        public void AddParam(string name, string docStr)
-        {
-            Ensure.NotNull(name, nameof(name));
-            Ensure.NotNull(docStr, nameof(docStr));
-
-            Params.Add((name, docStr));
-        }
-
-        public IDocBuilder WithParam(string name, string docStr)
-        {
-            AddParam(name, docStr);
-            return this;
-        }
-
-        public void AddParams(params (string Name, string DocStr)[] parameters)
-        {
-            Ensure.NotNull(parameters, nameof(parameters));
-            foreach (var (name, doc) in parameters) AddParam(name, doc);
-        }
+        public IDocBuilder WithParam(string name, string docStr) =>
+            WithParams((name, docStr));
 
         public IDocBuilder WithParams(params (string Name, string DocStr)[] parameters)
         {
-            AddParams(parameters);
-            return this;
+            ValidateStringTupleArray(parameters, nameof(parameters));
+            return new DocBuilder(this, updatedParams: _params.AddRange(parameters));
         }
 
-        public void AddReturns(string returns) => 
-            AddReturns(SplitDocString(returns)?.ToArray());
-
-        public IDocBuilder WithReturns(string returns)
-        {
-            AddReturns(returns);
-            return this;
-        }
-
-        public void AddReturns(params string[] returns)
-        {
-            Ensure.ContainsNoNull(returns, nameof(returns));
-            ReturnsLines = returns;
-        }
+        public IDocBuilder WithReturns(string returns) =>
+            WithReturns(SplitDocString(returns)?.ToArray());
 
         public IDocBuilder WithReturns(params string[] returns)
         {
-            AddReturns(returns);
-            return this;
+            Ensure.ContainsNoNull(returns, nameof(returns));
+            return new DocBuilder(this, updatedReturnsLines: returns.ToImmutableList());
         }
 
-        public void AddException(string name, string docStr)
-        {
-            Ensure.NotNull(name, nameof(name));
-            Ensure.NotNull(docStr, nameof(docStr));
-
-            Exceptions.Add((name, SplitDocString(docStr)));
-        }
-
-        public IDocBuilder WithException(string name, string docStr)
-        {
-            AddException(name, docStr);
-            return this;
-        }
-
-        public void AddExceptions(params (string Name, string DocStr)[] exceptions)
-        {
-            Ensure.NotNull(exceptions, nameof(exceptions));
-            foreach (var (name, doc) in exceptions) AddException(name, doc);
-        }
+        public IDocBuilder WithException(string name, string docStr) =>
+            WithExceptions((name, docStr));
 
         public IDocBuilder WithExceptions(params (string Name, string DocStr)[] exceptions)
         {
-            AddExceptions(exceptions);
-            return this;
+            ValidateStringTupleArray(exceptions, nameof(exceptions));
+
+            IEnumerable<(string Name, IImmutableList<string>)> exceptionData = 
+                exceptions.Select(v => (v.Name, (IImmutableList<string>) SplitDocString(v.DocStr).ToImmutableList()));
+            return new DocBuilder(this, updatedExceptions: _exceptions.AddRange(exceptionData));
         }
 
-        public void AddRemarks(string remarks) =>
-            AddRemarks(SplitDocString(remarks)?.ToArray());
-
-        public IDocBuilder WithRemarks(string remarks)
-        {
-            AddRemarks(remarks);
-            return this;
-        }
-
-        public void AddRemarks(params string[] remarks)
-        {
-            Ensure.ContainsNoNull(remarks, nameof(remarks));
-            RemarksLines = remarks;
-        }
+        public IDocBuilder WithRemarks(string remarks) =>
+            WithRemarks(SplitDocString(remarks)?.ToArray());
 
         public IDocBuilder WithRemarks(params string[] remarks)
         {
-            AddRemarks(remarks);
-            return this;
+            Ensure.ContainsNoNull(remarks, nameof(remarks));
+            return new DocBuilder(this, updatedRemarksLines: remarks.ToImmutableList());
         }
 
         public IEnumerable<string> Compile()
@@ -179,24 +129,24 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         }
 
         private IEnumerable<string> CompileSummary() =>
-            CompileBlock("summary", SummaryLines);
+            CompileBlock("summary", _summaryLines);
 
         private IEnumerable<string> CompileTypeParams() =>
-            TypeParams.Select(ToTypeParamStr);
+            _typeParams.Select(ToTypeParamStr);
 
         private static string ToTypeParamStr((string Name, string DocStr) typeParam) =>
             $"/// <typeparam name=\"{typeParam.Name}\">{typeParam.DocStr}</typeparam>";
 
         private IEnumerable<string> CompileParams() =>
-            Params.Select(ToParamStr);
+            _params.Select(ToParamStr);
 
         private static string ToParamStr((string Name, string DocStr) param) =>
             $"/// <param name=\"{param.Name}\">{param.DocStr}</param>";
 
         private IEnumerable<string> CompileReturns() =>
-            CompileOptionalBlock("returns", ReturnsLines);
+            CompileOptionalBlock("returns", _returnsLines);
         private IEnumerable<string> CompileRemarks() =>
-            CompileOptionalBlock("remarks", RemarksLines);
+            CompileOptionalBlock("remarks", _remarksLines);
 
         private static IEnumerable<string> CompileOptionalBlock(string header, IEnumerable<string> lines) =>
             lines != null ? CompileBlock(header, lines) : Enumerable.Empty<string>();
@@ -209,16 +159,26 @@ namespace BeardedPlatypus.SourceGenerators.Utility.CodeGeneration
         }
 
         private IEnumerable<string> CompileExceptions() =>
-            Exceptions.SelectMany(ToExceptionStr);
+            _exceptions.SelectMany(ToExceptionStr);
 
-        private static IEnumerable<string> ToExceptionStr((string Name, IEnumerable<string> DocStr) exception)
+        private static IEnumerable<string> ToExceptionStr((string Name, IImmutableList<string> DocStr) exception)
         {
             yield return $"/// <exception cref=\"{exception.Name}\">";
             foreach (var line in exception.DocStr) yield return $"/// {line}";
             yield return $"/// </exception>";
         }
 
-        private IEnumerable<string> SplitDocString(string docStr) =>
+        private static IEnumerable<string> SplitDocString(string docStr) =>
             docStr?.Replace("\r\n", "\n").Split('\n');
+
+        private void ValidateStringTupleArray((string Name, string DocStr)[] tuples, string paramName)
+        {
+            Ensure.NotNull(tuples, paramName);
+            foreach (var (name, docStr) in tuples)
+            { 
+                Ensure.NotNull(name, paramName); 
+                Ensure.NotNull(docStr, paramName);
+            }
+        }
     }
 }

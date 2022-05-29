@@ -6,13 +6,7 @@ namespace BeardedPlatypus.SourceGenerators.Utility.Tests.CodeGeneration;
 [TestFixture]
 public class DocBuilderTest
 {
-    private IDocBuilder DocBuilder { get; set; }
-
-    [SetUp]
-    public void SetUp()
-    {
-        DocBuilder = new DocBuilder();
-    }
+    private IDocBuilder DocBuilder { get; } = new DocBuilder();
 
     [Test]
     public void Empty_ExpectedResult()
@@ -25,14 +19,6 @@ public class DocBuilderTest
             "/// </summary>"
         };
         Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
-    public void AddSummary_Null_ThrowsArgumentNullException()
-    {
-        const string? nullStr = null;
-        void Call() => DocBuilder.AddSummary(nullStr);
-        Assert.That(Call, Throws.ArgumentNullException);
     }
 
     [Test]
@@ -77,53 +63,6 @@ public class DocBuilderTest
     }
 
     [Test]
-    [TestCaseSource(nameof(AddSummaryData))]
-    public void AddSummary_ExpectedResult(string summary, string[] expectedResult)
-    {
-        
-        DocBuilder.AddSummary(summary);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
-    [TestCaseSource(nameof(AddSummaryData))]
-    public void WithSummary_ExpectedResult(string summary, string[] expectedResult)
-    {
-        
-        var docBuilder = DocBuilder.WithSummary(summary);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
-    }
-
-    [Test]
-    public void AddSummary_Params_ExpectedResult()
-    {
-        const string line1 = "This is line 1.";
-        const string line2 = "This is line 2.";
-        const string line3 = "This is line 3.";
-
-        DocBuilder.AddSummary(
-            line1,
-            line2,
-            line3);
-        var result = DocBuilder.Compile();
-
-        string[] expectedResult =
-        {
-             "/// <summary>",
-            $"/// {line1}",
-            $"/// {line2}",
-            $"/// {line3}",
-             "/// </summary>"
-        };
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
     public void WithSummary_Params_ExpectedResult()
     {
         const string line1 = "This is line 1.";
@@ -134,7 +73,7 @@ public class DocBuilderTest
             line1,
             line2,
             line3);
-        var result = DocBuilder.Compile();
+        var result = docBuilder.Compile();
 
         string[] expectedResult =
         {
@@ -145,7 +84,7 @@ public class DocBuilderTest
              "/// </summary>"
         };
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     private static IEnumerable<TestCaseData> AddParamNullData()
@@ -153,15 +92,6 @@ public class DocBuilderTest
         yield return new TestCaseData("name", null).SetName("docStr null");
         yield return new TestCaseData(null, "docStr").SetName("name null");
         yield return new TestCaseData(null, null).SetName("both null");
-    }
-
-    [Test]
-    [TestCaseSource(nameof(AddParamNullData))]
-    public void AddParam_ParameterNull_ThrowsArgumentNullException(string name,
-                                                                   string docStr)
-    {
-        void Call() => DocBuilder.AddParam(name, docStr);
-        Assert.That(Call, Throws.ArgumentNullException);
     }
 
     [Test]
@@ -174,27 +104,6 @@ public class DocBuilderTest
     }
 
     [Test]
-    public void AddParam_ExpectedResults()
-    {
-        var param1 = (Name: "param1", DocStr: "Description 1.");
-        var param2 = (Name: "param2", DocStr: "Description 2.");
-
-        DocBuilder.AddParam(param1.Name, param1.DocStr);
-        DocBuilder.AddParam(param2.Name, param2.DocStr);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        string[] expectedResult =
-        {
-             "/// <summary>",
-             "/// </summary>",
-            $"/// <param name=\"{param1.Name}\">{param1.DocStr}</param>",
-            $"/// <param name=\"{param2.Name}\">{param2.DocStr}</param>",
-        };
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
     public void WithParam_ExpectedResults()
     {
         var param1 = (Name: "param1", DocStr: "Description 1.");
@@ -202,7 +111,7 @@ public class DocBuilderTest
 
         var docBuilder = DocBuilder.WithParam(param1.Name, param1.DocStr).
                                     WithParam(param2.Name, param2.DocStr);
-        IEnumerable<string> result = DocBuilder.Compile();
+        IEnumerable<string> result = docBuilder.Compile();
 
         string[] expectedResult =
         {
@@ -213,14 +122,7 @@ public class DocBuilderTest
         };
 
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
-    }
-
-    [Test]
-    public void AddParams_ParameterNull_ExpectedResults()
-    {
-        void Call() => DocBuilder.AddParams(null);
-        Assert.That(Call, Throws.ArgumentNullException);
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     [Test]
@@ -231,33 +133,13 @@ public class DocBuilderTest
     }
 
     [Test]
-    public void AddParams_ExpectedResults()
-    {
-        var param1 = (Name: "param1", DocStr: "Description 1.");
-        var param2 = (Name: "param2", DocStr: "Description 2.");
-
-        DocBuilder.AddParams(param1, param2);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        string[] expectedResult =
-        {
-             "/// <summary>",
-             "/// </summary>",
-            $"/// <param name=\"{param1.Name}\">{param1.DocStr}</param>",
-            $"/// <param name=\"{param2.Name}\">{param2.DocStr}</param>",
-        };
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
     public void WithParams_ExpectedResults()
     {
         var param1 = (Name: "param1", DocStr: "Description 1.");
         var param2 = (Name: "param2", DocStr: "Description 2.");
 
         var docBuilder = DocBuilder.WithParams(param1, param2);
-        IEnumerable<string> result = DocBuilder.Compile();
+        IEnumerable<string> result = docBuilder.Compile();
 
         string[] expectedResult =
         {
@@ -268,16 +150,7 @@ public class DocBuilderTest
         };
 
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
-    }
-
-    [Test]
-    [TestCaseSource(nameof(AddParamNullData))]
-    public void AddTypeParam_ParameterNull_ThrowsArgumentNullException(string name,
-                                                                       string docString)
-    {
-        void Call() => DocBuilder.AddTypeParam(name, docString);
-        Assert.That(Call, Throws.ArgumentNullException);
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     [Test]
@@ -290,27 +163,6 @@ public class DocBuilderTest
     }
 
     [Test]
-    public void AddTypeParam_ExpectedResults()
-    {
-        var param1 = (Name: "param1", DocStr: "Description 1.");
-        var param2 = (Name: "param2", DocStr: "Description 2.");
-
-        DocBuilder.AddTypeParam(param1.Name, param1.DocStr);
-        DocBuilder.AddTypeParam(param2.Name, param2.DocStr);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        string[] expectedResult =
-        {
-             "/// <summary>",
-             "/// </summary>",
-            $"/// <typeparam name=\"{param1.Name}\">{param1.DocStr}</typeparam>",
-            $"/// <typeparam name=\"{param2.Name}\">{param2.DocStr}</typeparam>",
-        };
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
     public void WithTypeParam_ExpectedResults()
     {
         var param1 = (Name: "param1", DocStr: "Description 1.");
@@ -318,7 +170,7 @@ public class DocBuilderTest
 
         var docBuilder =  DocBuilder.WithTypeParam(param1.Name, param1.DocStr)
                                     .WithTypeParam(param2.Name, param2.DocStr);
-        IEnumerable<string> result = DocBuilder.Compile();
+        IEnumerable<string> result = docBuilder.Compile();
 
         string[] expectedResult =
         {
@@ -329,14 +181,7 @@ public class DocBuilderTest
         };
 
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(docBuilder));
-    }
-
-    [Test]
-    public void AddTypeParams_ParameterNull_ExpectedResults()
-    {
-        void Call() => DocBuilder.AddTypeParams(null);
-        Assert.That(Call, Throws.ArgumentNullException);
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     [Test]
@@ -347,33 +192,13 @@ public class DocBuilderTest
     }
 
     [Test]
-    public void AddTypeParams_ExpectedResults()
-    {
-        var param1 = (Name: "param1", DocStr: "Description 1.");
-        var param2 = (Name: "param2", DocStr: "Description 2.");
-
-        DocBuilder.AddTypeParams(param1, param2);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        string[] expectedResult =
-        {
-             "/// <summary>",
-             "/// </summary>",
-            $"/// <typeparam name=\"{param1.Name}\">{param1.DocStr}</typeparam>",
-            $"/// <typeparam name=\"{param2.Name}\">{param2.DocStr}</typeparam>",
-        };
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
     public void WithTypeParams_ExpectedResults()
     {
         var param1 = (Name: "param1", DocStr: "Description 1.");
         var param2 = (Name: "param2", DocStr: "Description 2.");
 
         var docBuilder = DocBuilder.WithTypeParams(param1, param2);
-        IEnumerable<string> result = DocBuilder.Compile();
+        IEnumerable<string> result = docBuilder.Compile();
 
         string[] expectedResult =
         {
@@ -384,14 +209,7 @@ public class DocBuilderTest
         };
 
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
-    }
-
-    [Test]
-    public void AddReturns_ReturnsNull_ThrowsArgumentNull()
-    {
-        void Call() => DocBuilder.AddReturns(null as string);
-        Assert.That(Call, Throws.ArgumentNullException);
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     private static IEnumerable<TestCaseData> AddReturnsData()
@@ -433,51 +251,14 @@ public class DocBuilderTest
 
     [Test]
     [TestCaseSource(nameof(AddReturnsData))]
-    public void AddReturns_ExpectedResult(string summary, string[] expectedResult)
-    {
-        
-        DocBuilder.AddReturns(summary);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
-    [TestCaseSource(nameof(AddReturnsData))]
     public void WithReturns_ExpectedResult(string summary, string[] expectedResult)
     {
         
         var docBuilder = DocBuilder.WithReturns(summary);
-        IEnumerable<string> result = DocBuilder.Compile();
+        IEnumerable<string> result = docBuilder.Compile();
 
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
-    }
-
-    [Test]
-    public void AddReturns_Params_ExpectedResult()
-    {
-        const string line1 = "This is line 1.";
-        const string line2 = "This is line 2.";
-        const string line3 = "This is line 3.";
-
-        DocBuilder.AddReturns(
-            line1,
-            line2,
-            line3);
-        var result = DocBuilder.Compile();
-
-        string[] expectedResult =
-        {
-             "/// <summary>",
-             "/// </summary>",
-             "/// <returns>",
-            $"/// {line1}",
-            $"/// {line2}",
-            $"/// {line3}",
-             "/// </returns>"
-        };
-        Assert.That(result, Is.EqualTo(expectedResult));
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     [Test]
@@ -491,7 +272,7 @@ public class DocBuilderTest
             line1,
             line2,
             line3);
-        var result = DocBuilder.Compile();
+        var result = docBuilder.Compile();
 
         string[] expectedResult =
         {
@@ -504,16 +285,7 @@ public class DocBuilderTest
              "/// </returns>"
         };
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
-    }
-
-    [Test]
-    [TestCaseSource(nameof(AddParamNullData))]
-    public void AddException_ParameterNull_ThrowsArgumentNullException(string name, 
-                                                                       string docStr)
-    {
-        void Call() => DocBuilder.AddException(name, docStr);
-        Assert.That(Call, Throws.ArgumentNullException);
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     [Test]
@@ -526,31 +298,6 @@ public class DocBuilderTest
     }
 
     [Test]
-    public void AddException_ExpectedResults()
-    {
-        var param1 = (Name: "param1", DocStr: "Description 1.");
-        var param2 = (Name: "param2", DocStr: "Description 2.");
-
-        DocBuilder.AddException(param1.Name, param1.DocStr);
-        DocBuilder.AddException(param2.Name, param2.DocStr);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        string[] expectedResult =
-        {
-             "/// <summary>",
-             "/// </summary>",
-            $"/// <exception cref=\"{param1.Name}\">",
-            $"/// {param1.DocStr}",
-            "/// </exception>",
-            $"/// <exception cref=\"{param2.Name}\">",
-            $"/// {param2.DocStr}",
-            "/// </exception>",
-        };
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
     public void WithException_ExpectedResults()
     {
         var param1 = (Name: "param1", DocStr: "Description 1.");
@@ -558,7 +305,7 @@ public class DocBuilderTest
 
         var docBuilder = DocBuilder.WithException(param1.Name, param1.DocStr).
                                     WithException(param2.Name, param2.DocStr);
-        IEnumerable<string> result = DocBuilder.Compile();
+        IEnumerable<string> result = docBuilder.Compile();
 
         string[] expectedResult =
         {
@@ -573,14 +320,7 @@ public class DocBuilderTest
         };
 
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
-    }
-
-    [Test]
-    public void AddExceptions_ParameterNull_ExpectedResults()
-    {
-        void Call() => DocBuilder.AddExceptions(null);
-        Assert.That(Call, Throws.ArgumentNullException);
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     [Test]
@@ -591,37 +331,13 @@ public class DocBuilderTest
     }
 
     [Test]
-    public void AddExceptions_ExpectedResults()
-    {
-        var param1 = (Name: "param1", DocStr: "Description 1.");
-        var param2 = (Name: "param2", DocStr: "Description 2.");
-
-        DocBuilder.AddExceptions(param1, param2);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        string[] expectedResult =
-        {
-             "/// <summary>",
-             "/// </summary>",
-            $"/// <exception cref=\"{param1.Name}\">",
-            $"/// {param1.DocStr}",
-            "/// </exception>",
-            $"/// <exception cref=\"{param2.Name}\">",
-            $"/// {param2.DocStr}",
-            "/// </exception>",
-        };
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
     public void WithExceptions_ExpectedResults()
     {
         var param1 = (Name: "param1", DocStr: "Description 1.");
         var param2 = (Name: "param2", DocStr: "Description 2.");
 
         var docBuilder = DocBuilder.WithExceptions(param1, param2);
-        IEnumerable<string> result = DocBuilder.Compile();
+        string[] result = docBuilder.Compile().ToArray();
 
         string[] expectedResult =
         {
@@ -636,14 +352,7 @@ public class DocBuilderTest
         };
 
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
-    }
-
-    [Test]
-    public void AddRemarks_ReturnsNull_ThrowsArgumentNull()
-    {
-        void Call() => DocBuilder.AddRemarks(null as string);
-        Assert.That(Call, Throws.ArgumentNullException);
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     private static IEnumerable<TestCaseData> AddRemarksData()
@@ -685,51 +394,14 @@ public class DocBuilderTest
 
     [Test]
     [TestCaseSource(nameof(AddRemarksData))]
-    public void AddRemarks_ExpectedResult(string summary, string[] expectedResult)
-    {
-        
-        DocBuilder.AddRemarks(summary);
-        IEnumerable<string> result = DocBuilder.Compile();
-
-        Assert.That(result, Is.EqualTo(expectedResult));
-    }
-
-    [Test]
-    [TestCaseSource(nameof(AddRemarksData))]
     public void WithRemarks_ExpectedResult(string summary, string[] expectedResult)
     {
         
         var docBuilder = DocBuilder.WithRemarks(summary);
-        IEnumerable<string> result = DocBuilder.Compile();
+        IEnumerable<string> result = docBuilder.Compile();
 
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
-    }
-
-    [Test]
-    public void AddRemarks_Params_ExpectedResult()
-    {
-        const string line1 = "This is line 1.";
-        const string line2 = "This is line 2.";
-        const string line3 = "This is line 3.";
-
-        DocBuilder.AddRemarks(
-            line1,
-            line2,
-            line3);
-        var result = DocBuilder.Compile();
-
-        string[] expectedResult =
-        {
-             "/// <summary>",
-             "/// </summary>",
-             "/// <remarks>",
-            $"/// {line1}",
-            $"/// {line2}",
-            $"/// {line3}",
-             "/// </remarks>"
-        };
-        Assert.That(result, Is.EqualTo(expectedResult));
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 
     [Test]
@@ -743,7 +415,7 @@ public class DocBuilderTest
             line1,
             line2,
             line3);
-        var result = DocBuilder.Compile();
+        var result = docBuilder.Compile();
 
         string[] expectedResult =
         {
@@ -756,6 +428,6 @@ public class DocBuilderTest
              "/// </remarks>"
         };
         Assert.That(result, Is.EqualTo(expectedResult));
-        Assert.That(docBuilder, Is.SameAs(DocBuilder));
+        Assert.That(docBuilder, Is.Not.SameAs(DocBuilder));
     }
 }
